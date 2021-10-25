@@ -77,12 +77,6 @@ waldo::compare(unique(my_data$geneID), unique(my_subset$geneID))
     ## [17] "K00020" -                         
     ##  ... ...        ...      and 83 more ...
 
-``` r
-# compare(my_data, my_subset)
-# can not directly compare dataframes!
-# gives error: Error in compare_proxy.spec_tbl_df(x, paths[[1]]) : unused argument (paths[[1]])
-```
-
 Another example with metadata this time. Subsetting samples sometimes
 gets us into trouble if we have also subsetted a matrix of counts.
 
@@ -141,3 +135,14 @@ compare(colnames(my_matrix), sample_subset2$SampleID, max_diffs = Inf)
     ##  [9] "D6.6N5T82"  - "D6.7N4T70"  [9]
     ## [10] "D6.6N6T82"  -                 
     ## [11] "D6.7N2T70"  -
+
+# Caveats
+
+It seems you can not compare dataframes directly:
+
+``` r
+try(compare(my_data, my_subset))
+```
+
+    ## Error in compare_proxy.spec_tbl_df(x, paths[[1]]) : 
+    ##   unused argument (paths[[1]])

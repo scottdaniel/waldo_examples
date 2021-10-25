@@ -65,10 +65,6 @@ With Waldo, we can quickly determine which genes were left out of the graph:
 
 waldo::compare(unique(my_data$geneID), unique(my_subset$geneID))
 
-# compare(my_data, my_subset)
-# can not directly compare dataframes!
-# gives error: Error in compare_proxy.spec_tbl_df(x, paths[[1]]) : unused argument (paths[[1]])
-
 ```
 
 Another example with metadata this time. Subsetting samples sometimes gets us into trouble if we have also subsetted a matrix of counts.
@@ -102,6 +98,16 @@ Again, you can quickly find which samples changed:
 ```{r}
 
 compare(colnames(my_matrix), sample_subset2$SampleID, max_diffs = Inf)
+
+```
+
+# Caveats
+
+It seems you can not compare dataframes directly:
+
+```{r}
+
+try(compare(my_data, my_subset))
 
 ```
 
