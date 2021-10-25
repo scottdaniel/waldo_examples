@@ -16,7 +16,7 @@ library(tidyverse)
 
 # Introduction
 
-Waldo was originally created as a tool for testing equality of objects when developing R packages (see `testthat::expect_equal()`). The purpose of the main function `compare()` is to determine the difference between two R objects and display them. That way, if there are differences, the test will fail and one can determine the source of the bug. However, could we not use this function to ascertain difference in data sets?
+[Waldo](https://www.tidyverse.org/blog/2020/10/waldo/) was originally created as a tool for testing equality of objects when developing R packages [(see `testthat::expect_equal()`)](https://testthat.r-lib.org/reference/equality-expectations.html). The purpose of the main function [`compare()`](https://rdrr.io/cran/waldo/man/compare.html) is to determine the difference between two R objects and display them. That way, if there are differences, the test will fail and one can determine the source of the bug. However, could we not use this function to ascertain differences in data sets?
 
 ## Metadata
 
@@ -29,7 +29,7 @@ my_samples <- read_tsv("sample_sheet.tsv", show_col_types = FALSE)
 
 ```
 
-### Sub-setting
+### Subsetting
 
 A common practice is to subset the data to "drill-down" to pertinent details. We might filter out the controls or just look at the top 10 genes in a dataset.
 
