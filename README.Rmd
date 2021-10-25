@@ -57,9 +57,9 @@ my_subset %>%
 
 ```
 
-## Which ones were left out?
+## Which ones changed?
 
-With Waldo, we can quickly determine which genes were left out of the graph:
+With Waldo, we can quickly determine which genes were left out and which ones were kept:
 
 ```{r}
 
@@ -67,15 +67,34 @@ waldo::compare(unique(my_data$geneID), unique(my_subset$geneID))
 
 ```
 
+Compare this with using, say, `setdiff()`:
+
+```{r}
+
+setdiff(unique(my_data$geneID), unique(my_subset$geneID))
+
+```
+
+This only shows us the ones that were left out. You would have to also do an intersect to see the ones that stayed the same:
+
+```{r}
+
+intersect(unique(my_data$geneID), unique(my_subset$geneID))
+
+```
+
 Another example with metadata this time. Subsetting samples sometimes gets us into trouble if we have also subsetted a matrix of counts.
 
 ```{r}
 
+set.seed(42)
+
 sample_subset1 <- my_samples %>%
-  filter(study_group %in% "Blue")
+  pull(SampleID) %>%
+  sample(10)
 
 my_matrix <- my_data %>%
-  filter(SampleID %in% sample_subset1$SampleID) %>%
+  filter(SampleID %in% sample_subset1) %>%
   pivot_wider(names_from = SampleID, values_from = count) %>%
   column_to_rownames(var = "geneID") %>%
   as.matrix()
@@ -87,9 +106,10 @@ head(my_matrix)
 ```{r}
 
 sample_subset2 <- my_samples %>%
-  filter(study_group %in% "Yellow")
+  pull(SampleID) %>%
+  sample(10)
 
-my_error <- try(my_matrix[,sample_subset2$SampleID])
+my_error <- try(my_matrix[,sample_subset2])
 
 ```
 
@@ -97,7 +117,15 @@ Again, you can quickly find which samples changed:
 
 ```{r}
 
-compare(colnames(my_matrix), sample_subset2$SampleID, max_diffs = Inf)
+compare(sort(colnames(my_matrix)), sort(sample_subset2), max_diffs = Inf)
+
+```
+
+Here, this actually seems worse, because the ordering is missing half of the similarities:
+
+```{r}
+
+intersect(colnames(my_matrix), sample_subset2)
 
 ```
 
