@@ -94,7 +94,6 @@ sample_subset2 <- my_samples %>%
   filter(study_group %in% "Yellow")
 
 my_error <- try(my_matrix[,sample_subset2$SampleID])
-my_error
 
 ```
 

@@ -119,16 +119,6 @@ my_error <- try(my_matrix[,sample_subset2$SampleID])
 
     ## Error in my_matrix[, sample_subset2$SampleID] : subscript out of bounds
 
-``` r
-my_error
-```
-
-    ## [1] "Error in my_matrix[, sample_subset2$SampleID] : subscript out of bounds\n"
-    ## attr(,"class")
-    ## [1] "try-error"
-    ## attr(,"condition")
-    ## <simpleError in my_matrix[, sample_subset2$SampleID]: subscript out of bounds>
-
 Again, you can quickly find which samples changed:
 
 ``` r
