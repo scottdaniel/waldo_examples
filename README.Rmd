@@ -121,7 +121,7 @@ compare(sort(colnames(my_matrix)), sort(sample_subset2), max_diffs = Inf)
 
 ```
 
-Here, this actually seems worse, because the ordering is missing half of the similarities:
+Here, this actually seems worse, because the ordering is missing some of the similarities:
 
 ```{r}
 

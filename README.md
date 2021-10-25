@@ -168,7 +168,7 @@ compare(sort(colnames(my_matrix)), sort(sample_subset2), max_diffs = Inf)
     ##  [9] "D6.7N1T70"  - "D6.7N2T70"  [9] 
     ## [10] "D6.7N4T70"  | "D6.7N4T70"  [10]
 
-Here, this actually seems worse, because the ordering is missing half of
+Here, this actually seems worse, because the ordering is missing some of
 the similarities:
 
 ``` r
