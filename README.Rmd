@@ -1,5 +1,5 @@
 ---
-title: "Waldo exmaples"
+title: "Waldo examples"
 output: github_document
 ---
 
@@ -71,7 +71,38 @@ waldo::compare(unique(my_data$geneID), unique(my_subset$geneID))
 
 ```
 
-Another example with metadata this time:
+Another example with metadata this time. Subsetting samples sometimes gets us into trouble if we have also subsetted a matrix of counts.
 
+```{r}
 
+sample_subset1 <- my_samples %>%
+  filter(study_group %in% "Blue")
+
+my_matrix <- my_data %>%
+  filter(SampleID %in% sample_subset1$SampleID) %>%
+  pivot_wider(names_from = SampleID, values_from = count) %>%
+  column_to_rownames(var = "geneID") %>%
+  as.matrix()
+
+head(my_matrix)
+
+```
+
+```{r}
+
+sample_subset2 <- my_samples %>%
+  filter(study_group %in% "Yellow")
+
+my_error <- try(my_matrix[,sample_subset2$SampleID])
+my_error
+
+```
+
+Again, you can quickly find which samples changed:
+
+```{r}
+
+compare(colnames(my_matrix), sample_subset2$SampleID, max_diffs = Inf)
+
+```
 

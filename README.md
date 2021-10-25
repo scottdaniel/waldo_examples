@@ -1,4 +1,4 @@
-Waldo exmaples
+Waldo examples
 ================
 
 # Introduction
@@ -79,4 +79,71 @@ waldo::compare(unique(my_data$geneID), unique(my_subset$geneID))
 # gives error: Error in compare_proxy.spec_tbl_df(x, paths[[1]]) : unused argument (paths[[1]])
 ```
 
-Another example with metadata this time:
+Another example with metadata this time. Subsetting samples sometimes
+gets us into trouble if we have also subsetted a matrix of counts.
+
+``` r
+sample_subset1 <- my_samples %>%
+  filter(study_group %in% "Blue")
+
+my_matrix <- my_data %>%
+  filter(SampleID %in% sample_subset1$SampleID) %>%
+  pivot_wider(names_from = SampleID, values_from = count) %>%
+  column_to_rownames(var = "geneID") %>%
+  as.matrix()
+
+head(my_matrix)
+```
+
+    ##        D15.1N2T29 D16.1N2T29 D16.1N4T29 D16.1N5T29 D6.3N4T42 D6.3N5T42
+    ## K00001        110        116        118        119       179        83
+    ## K00002         14         32         22         31        30        60
+    ## K00003        635        894        699        665       932       940
+    ## K00004          0          1          0          1         2         0
+    ## K00005          5         35         21         26        26        72
+    ## K00007          0          0          0          0         0         0
+    ##        D6.3N7T42 D6.6N3T82 D6.6N5T82 D6.6N6T82 D6.7N2T70
+    ## K00001       179       201       111       158       158
+    ## K00002        10        31        60        10        28
+    ## K00003       876       816       922       705       643
+    ## K00004         1         2         2         0         1
+    ## K00005         5        20        48         9        23
+    ## K00007         0         0         0         1         0
+
+``` r
+sample_subset2 <- my_samples %>%
+  filter(study_group %in% "Yellow")
+
+my_error <- try(my_matrix[,sample_subset2$SampleID])
+```
+
+    ## Error in my_matrix[, sample_subset2$SampleID] : subscript out of bounds
+
+``` r
+my_error
+```
+
+    ## [1] "Error in my_matrix[, sample_subset2$SampleID] : subscript out of bounds\n"
+    ## attr(,"class")
+    ## [1] "try-error"
+    ## attr(,"condition")
+    ## <simpleError in my_matrix[, sample_subset2$SampleID]: subscript out of bounds>
+
+Again, you can quickly find which samples changed:
+
+``` r
+compare(colnames(my_matrix), sample_subset2$SampleID, max_diffs = Inf)
+```
+
+    ##      old          | new             
+    ##  [1] "D15.1N2T29" - "D15.1N6T29" [1]
+    ##  [2] "D16.1N2T29" - "D16.1N1T29" [2]
+    ##  [3] "D16.1N4T29" - "D16.1N3T29" [3]
+    ##  [4] "D16.1N5T29" - "D6.3N1T42"  [4]
+    ##  [5] "D6.3N4T42"  - "D6.3N6T42"  [5]
+    ##  [6] "D6.3N5T42"  - "D6.6N2T82"  [6]
+    ##  [7] "D6.3N7T42"  - "D6.6N4T82"  [7]
+    ##  [8] "D6.6N3T82"  - "D6.7N1T70"  [8]
+    ##  [9] "D6.6N5T82"  - "D6.7N4T70"  [9]
+    ## [10] "D6.6N6T82"  -                 
+    ## [11] "D6.7N2T70"  -
